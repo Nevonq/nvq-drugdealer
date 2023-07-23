@@ -10,7 +10,7 @@ AddEventHandler("nvq-drugdealer:drugfunction", function(input, itemas, kaina, su
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local cena = (kaina * sumabendra)
 	local name     = GetPlayerName(source)
-	local discord = 'nezinomas'
+	local discord = 'unknown'
     for k,v in ipairs(GetPlayerIdentifiers(source)) do
     if v:match('discord') then
         discord = v:gsub('discord:','')
