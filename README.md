@@ -1,7 +1,7 @@
 # nvq-drugdealer
 
 This resource for ESX creates an drug dealer system that allows you to buy and sell items in the same shop for black money, with logs, multiple notifications, easy to understand configuration.
-Original code: https://forum.cfx.re/t/release-free-esx-buy-and-sell-shop-optimized/3930131/6
+
 
 ## Download & Installation
 
