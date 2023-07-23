@@ -1,21 +1,17 @@
 ESX = nil
-inmenu = false
+isinalr = false
 
 Citizen.CreateThread(function()
 	while ESX == nil do
 		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-		Citizen.Wait(0)
+		Citizen.Wait(1200)
 	end
-	while ESX.GetPlayerData().job == nil do
-		Citizen.Wait(10)
-	end
-	PlayerData = ESX.GetPlayerData()
 end)
 if Config.EnablePed then
 	Citizen.CreateThread(function()
 		RequestModel(Config.Ped)
 		while not HasModelLoaded(Config.Ped) do
-			Wait(10)
+			Wait(550)
 		end
 		for k,v in pairs(Config.DrugDealer) do
 			local vectoras = vector3(v.x,v.y,v.z-1.0)
@@ -34,7 +30,7 @@ end
 
 
 function OpenDrugDealerMenu()
-	inmenu = true
+	isinalr = true
     ESX.UI.Menu.Open(
     	'default', GetCurrentResourceName(), 'drug_main',
     	{
@@ -56,35 +52,36 @@ function OpenDrugDealerMenu()
     	end,
     	function(data, menu)
         	menu.close()
-			inmenu = false
+			isinalr = false
     	end
 	)
 end
 
 
+local showText = false
+local markerInRange = false
+local playerPed = PlayerPedId()
 
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(0)
-        local ped = PlayerPedId()
-        local coords = GetEntityCoords(ped)
-        local markerInRange = false
-        local showText = false
+        Citizen.Wait(5)
 
-        for k, v in pairs(Config.DrugDealer) do
-            local distance = #(coords - v) -- gets distance
-            showText = false -- Reset the showText flag for each dealer
+        local coords = GetEntityCoords(playerPed)
+        showText = false
+        markerInRange = false
 
-            if Config.Enable3D and distance < 5 and not inmenu then 
-                showText = true -- Set the flag to true if player is in range of a dealer
+        for k, v in ipairs(Config.DrugDealer) do
+            local distance = #(coords - v)
+
+            if Config.Enable3D and distance < 5 and not showText then
+                showText = true
                 DrawText3D(v.x, v.y, v.z + Config.HeightOfTheText, '[E] Drug Dealer')
-                if distance < 2.5 and IsControlJustPressed(0, 38) then 
+                if distance < 2.5 and IsControlJustPressed(0, 38) then
                     OpenDrugDealerMenu()
-                end			
+                end
             end
 
-            -- MARKERS
-            if Config.EnableMarker and distance < 5 then
+            if Config.EnableMarker and distance < 5 and not markerInRange then
                 DrawMarker(Config.MarkerId, v.x, v.y, v.z - 0.95, 0, 0, 0, 0, 0, 0, 1.5, 1.5, 0.2, 255, 255, 255, 200, false, true, 2, nil, nil, false)
                 if distance < 1.1 then
                     markerInRange = true
@@ -93,13 +90,11 @@ Citizen.CreateThread(function()
         end
 
         if markerInRange then
-            -- Display the notification to press 'E' to open the menu.
             ESX.ShowHelpNotification(_U('help'))
-            if IsControlJustPressed(0, 38) then 
+            if IsControlJustPressed(0, 38) then
                 OpenDrugDealerMenu()
             end
         end
-      
     end
 end)
 
@@ -121,7 +116,7 @@ end
 
 
 function BuyMenu()
-	inmenu = true
+	isinalr = true
 	local player = PlayerPedId()
 	local elements = {}
 			
@@ -129,7 +124,7 @@ function BuyMenu()
 		if v.BuyInPawnShop then
 			table.insert(elements,
             {
-                label = v.label .. " | "..('<span style="color:red;">%s</span>'):format("€"..v.BuyPrice..""), 
+                label = v.label .. " | "..('<span style="color:red;">%s</span>'):format("â‚¬"..v.BuyPrice..""), 
                 itemName = v.itemName, 
                 BuyInPawnShop = v.BuyInPawnShop, 
                 BuyPrice = v.BuyPrice
@@ -167,7 +162,7 @@ function BuyMenu()
 	end,
 	function(data, menu)
 		menu.close()
-		inmenu = false
+		isinalr = false
 	end,
 	function(data, menu)
 	end
@@ -175,7 +170,7 @@ function BuyMenu()
 end
 
 function SellMenu()
-	inmenu = true
+	isinalr = true
 	local player = PlayerPedId()
 	local elements = {}
 
@@ -183,7 +178,7 @@ function SellMenu()
 		if v.SellInPawnShop then
 			table.insert(elements,
             {
-                label = v.label .. " | "..('<span style="color:red;">%s</span>'):format("€"..v.SellPrice..""), 
+                label = v.label .. " | "..('<span style="color:red;">%s</span>'):format("â‚¬"..v.SellPrice..""), 
                 itemName = v.itemName, 
                 SellInPawnShop = v.SellInPawnShop,
                 SellPrice = v.SellPrice
@@ -221,7 +216,7 @@ function SellMenu()
 	end,
 	function(data, menu)
 		menu.close()
-		inmenu = false
+		isinalr = false
 	end,
 	function(data, menu)
 	end
