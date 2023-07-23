@@ -8,12 +8,12 @@ This resource for ESX creates an drug dealer system that allows you to buy and s
 
 ```
 cd resources
-git clone https://github.com/ESX-Org/esx_policejob [esx]/nvq-drugdealer
+git clone https://github.com/Nevonq/nvq-drugdealer [esx]/nvq-drugdealer
 ```
 
 ### Manually
 
-- Download https://github.com/ESX-Org/esx_policejob/archive/master.zip
+- Download https://github.com/Nevonq/nvq-drugdealer/archive/refs/heads/main.zip
 - Put it in the `[esx]` directory
 
 ## Installation
