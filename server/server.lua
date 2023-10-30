@@ -1,6 +1,11 @@
-local ESX = nil
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
+
+if Config.NewESX then 
+	ESX = exports["es_extended"]:getSharedObject()
+else
+	 ESX = nil
+	TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+end
 
 RegisterServerEvent("nvq-drugdealer:drugfunction")
 AddEventHandler("nvq-drugdealer:drugfunction", function(input, itemas, kaina, sumabendra)
@@ -19,14 +24,14 @@ AddEventHandler("nvq-drugdealer:drugfunction", function(input, itemas, kaina, su
 	local DATE = os.date("%Y-%m-%d `\nDate:` %H:%M:%S")
 
 	if input == 'buy' then
-		if xPlayer.getAccount('black_money').money >= cena then
-			xPlayer.removeAccountMoney('black_money', cena)
+		if xPlayer.getAccount(Config.Money).money >= cena then
+			xPlayer.removeAccountMoney(Config.Money, cena)
 			xPlayer.addInventoryItem(itemas, sumabendra)
 
 			-- Notifications
 
 			if Config.EnableOkOk then
-				TriggerClientEvent('okokNotify:Alert', source, _('drugdealer'), "You bought: "..itemas .. ' | ' .. cena .. ' € | ' .. sumabendra .. ' x.', 5000, 'success')
+				TriggerClientEvent('okokNotify:Alert', source, _U('drugdealer'),  _U('you_bought')..itemas .. ' | ' .. cena ..  _U('currency')..' | ' .. sumabendra .._U('item'), 5000, 'success')
 			end
 
 			if Config.EnableESX then
@@ -52,12 +57,12 @@ AddEventHandler("nvq-drugdealer:drugfunction", function(input, itemas, kaina, su
 
 	elseif input == 'sell' then
 		if xPlayer.getInventoryItem(itemas).count >= sumabendra then
-			xPlayer.addAccountMoney('black_money', cena)
+			xPlayer.addAccountMoney(Config.Money, cena)
 			xPlayer.removeInventoryItem(itemas, sumabendra)
 
 			-- Notifications
 			if Config.EnableOkOk then
-				TriggerClientEvent('okokNotify:Alert', source, _('drugdealer'), "You sold: " .. itemas .. ' | ' .. cena .. ' € | ' .. sumabendra .. ' x.', 5000, 'success')
+				TriggerClientEvent('okokNotify:Alert', source, _('drugdealer'),  _U('sold_item') .. itemas .. ' | ' .. cena ..  _U('currency')..' | ' .. sumabendra ..  _U('item'), 5000, 'success')
 			end
 
 			if Config.EnableESX then
