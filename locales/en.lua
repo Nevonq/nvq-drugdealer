@@ -17,5 +17,8 @@ Locales['en'] = {
     ['incs'] = 'The value is not correct!',
     -- Other
     ['item'] = 'x.',
+
+    -- OX 
+    ['ox_interact'] = 'Talk with drug dealer',
   
 }
